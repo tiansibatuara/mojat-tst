@@ -29,7 +29,7 @@ app.register_blueprint(user_blueprint)
 
 @app.route('/')
 def hello_world():  # put application's code here
-    return 'Hello World!'
+    return 'Hello! This is Mozart!'
 
 # Authentication
 
