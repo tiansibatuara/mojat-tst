@@ -218,7 +218,6 @@ def addPlayer():
     "AerWonP" :  body['AerWonP']
   }
   cur.execute("INSERT INTO datasetplayer (Player, Nation, Pos, Squad, SoTPercent, PasTotCmpPercent, TklDriPercent, PressPercent, DriSuccPercent, RecPercent, AerWonPercent) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", (payload['Name'], payload['Nation'], payload['Position'], payload['Squad'], payload['SoTP'], payload['PasTotCmpP'], payload['TklDriP'], payload['PressP'], payload['DriSuccP'], payload['RecP'], payload['AerWonP']))
-  # conn.close()
   return jsonify(payload)
 
 @app.route('/updatePlayer', methods=['PUT'])
@@ -251,7 +250,6 @@ def updatePlayer():
   
   cur.execute("UPDATE datasetplayer SET Player = %s, Nation = %s, Pos = %s, Squad = %s, SoTPercent = %s, PasTotCmpPercent = %s, TklDriPercent = %s, PressPercent = %s, DriSuccPercent = %s, RecPercent = %s, AerWonPercent = %s WHERE Rk = %s", (payload['Name'], payload['Nation'], payload['Position'], payload['Squad'], payload['SoTP'], payload['PasTotCmpP'], payload['TklDriP'], payload['PressP'], payload['DriSuccP'], payload['RecP'], payload['AerWonP'], payload['Rk']))
   return jsonify(payload)
-  # conn.close()
 
 
 @app.route('/deletePlayer')
@@ -299,16 +297,21 @@ def dreamTeam():
 
   player_info = []
   players_rate = 0
+  expectedGoals = 0
   for p in rows:
     deci =  Decimal(6.0) + p[15] * Decimal(0.01) + p[24] * Decimal(0.01) + p[88] * Decimal(0.01) + p[92] * Decimal(0.01) + p[113] * Decimal(0.01) + p[126] * Decimal(0.01) + p[142] * Decimal(0.01)
+    hitung = p[12]/p[13]
+    hitung2 = hitung * Decimal(100)
     player_info.append({
       "Rk" : p[0],
       "Name" : p[1],
       "Rating": str('%.3f' % deci)
     })
+    expectedGoals += hitung 
     players_rate += deci
   team_rate = float(players_rate/11)
-  response = {"Team Rating": team_rate, "Team Players": player_info}
+  team_expectedGoal = float(expectedGoals/11)
+  response = {"Team Rating": team_rate, "Expected Goal": team_expectedGoal, "Team Players": player_info}
 
   return jsonify(response)
 
