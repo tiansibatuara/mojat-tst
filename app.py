@@ -252,7 +252,7 @@ def updatePlayer():
   return jsonify(payload)
 
 
-@app.route('/deletePlayer')
+@app.route('/deletePlayer', methods=['DELETE'])
 def deletePlayer():
   Rk = request.args.get('Rk')
   auth_header = request.args.get("Authorization")
