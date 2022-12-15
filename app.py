@@ -310,7 +310,7 @@ def dreamTeam():
     expectedGoals += hitung 
     players_rate += deci
   team_rate = float(players_rate/11)
-  team_expectedGoal = float(expectedGoals/11)
+  team_expectedGoal = float(expectedGoals*100/11)
   response = {"Team Rating": team_rate, "Expected Goal": team_expectedGoal, "Team Players": player_info}
 
   return jsonify(response)
