@@ -301,7 +301,6 @@ def dreamTeam():
   for p in rows:
     deci =  Decimal(6.0) + p[15] * Decimal(0.01) + p[24] * Decimal(0.01) + p[88] * Decimal(0.01) + p[92] * Decimal(0.01) + p[113] * Decimal(0.01) + p[126] * Decimal(0.01) + p[142] * Decimal(0.01)
     hitung = p[12]/p[13]
-    hitung2 = hitung * Decimal(100)
     player_info.append({
       "Rk" : p[0],
       "Name" : p[1],
