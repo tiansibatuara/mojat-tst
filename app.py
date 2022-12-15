@@ -312,62 +312,62 @@ def dreamTeam():
 
   return jsonify(response)
 
-@app.route('/useFTCore', methods=['GET'])
-def useFTCore():
-  auth_header = request.args.get("Authorization")
+# @app.route('/useFTCore', methods=['GET'])
+# def useFTCore():
+#   auth_header = request.args.get("Authorization")
 
-  valid = checkToken(auth_header)
+#   valid = checkToken(auth_header)
 
-  if not valid:
-    return "Token not valid", 404
+#   if not valid:
+#     return "Token not valid", 404
 
-  body = request.json
+#   body = request.json
 
-  dataLogin = {
-    'email' : body['email'],
-    'password': body['password'],
-    }
+#   dataLogin = {
+#     'email' : body['email'],
+#     'password': body['password'],
+#     }
 
-  dataTeam = {
-    'Team 1 Id': body["Team 1 Id"],
-    'Team 2 Id': body["Team 2 Id"]
-  }
+#   dataTeam = {
+#     'Team 1 Id': body["Team 1 Id"],
+#     'Team 2 Id': body["Team 2 Id"]
+#   }
 
-  response = requests.post('http://206.189.80.94:5000/log-in', json = dataLogin)
-  result = response.json()
+#   response = requests.post('http://206.189.80.94:5000/log-in', json = dataLogin)
+#   result = response.json()
   
-  tokenKai = result['token']
+#   tokenKai = result['token']
 
-  response2 = requests.get('http://206.189.80.94:5000/winPredict?Authorization=Bearer %s' % (tokenKai), json = dataTeam)
-  result2 = response2.json()
+#   response2 = requests.get('http://206.189.80.94:5000/winPredict?Authorization=Bearer %s' % (tokenKai), json = dataTeam)
+#   result2 = response2.json()
 
-  winnerTeam = result2["Winner Team Prediction"]
+#   winnerTeam = result2["Winner Team Prediction"]
 
-  rows = []
-  for winfo in cur.execute(text("SELECT * FROM `datasetplayer` WHERE Squad LIKE :sq ;"), {"sq" : f"%{winnerTeam}%"}):
-    rows.append(winfo)
+#   rows = []
+#   for winfo in cur.execute(text("SELECT * FROM `datasetplayer` WHERE Squad LIKE :sq ;"), {"sq" : f"%{winnerTeam}%"}):
+#     rows.append(winfo)
 
-  mvpPredict =[]
-  for p in rows:
-    deci =  Decimal(6.0) + p[15] * Decimal(0.01) + p[24] * Decimal(0.01) + p[88] * Decimal(0.01) + p[92] * Decimal(0.01) + p[113] * Decimal(0.01) + p[126] * Decimal(0.01) + p[142] * Decimal(0.01)
-    mvpPredict.append({
-      "Rk" : p[0],
-      "Name" : p[1],
-      "Nation" : p[2],
-      "Position" : p[3],
-      "Rating": str('%.3f' % deci),
-    })
+#   mvpPredict =[]
+#   for p in rows:
+#     deci =  Decimal(6.0) + p[15] * Decimal(0.01) + p[24] * Decimal(0.01) + p[88] * Decimal(0.01) + p[92] * Decimal(0.01) + p[113] * Decimal(0.01) + p[126] * Decimal(0.01) + p[142] * Decimal(0.01)
+#     mvpPredict.append({
+#       "Rk" : p[0],
+#       "Name" : p[1],
+#       "Nation" : p[2],
+#       "Position" : p[3],
+#       "Rating": str('%.3f' % deci),
+#     })
 
-  sorted_players = sorted(mvpPredict, key=lambda x: x['Rating'], reverse=True)
+#   sorted_players = sorted(mvpPredict, key=lambda x: x['Rating'], reverse=True)
   
-  res = []
-  if len(sorted_players) > 5:
-    for i in range(5):
-      res.append(sorted_players[i])
+#   res = []
+#   if len(sorted_players) > 5:
+#     for i in range(5):
+#       res.append(sorted_players[i])
 
 
-  response = {"Winner Team": winnerTeam, "MVP Prediction": res}
-  return jsonify(response)
+#   response = {"Winner Team": winnerTeam, "MVP Prediction": res}
+#   return jsonify(response)
 
 # Auth
 
